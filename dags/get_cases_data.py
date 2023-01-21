@@ -4,8 +4,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.operators.dummy import DummyOperator
-
-from merge_into_month import merge_into_month
+from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 
@@ -26,10 +25,15 @@ with DAG(
         bash_command=f'curl -sSL -o {OUTPUT_FILE_TEMPLATE} {URL_TEMPLATE}'
     )
 
-    merge_into_month_task = PythonOperator(
-        task_id="ingest",
-        python_callable=merge_into_month,
-        op_kwargs={},
+    merge_into_month_task = SparkSubmitOperator(
+        task_id="merge_into_month_task",
+        application="/usr/local/spark/app/merge_into_month.py",
+        name="merge_into_month",
+        conn_id="spark_local",
+        verbose=1,
+        conf={"spark.master":"spark://spark:7077"},
+        application_args=[],
+        dag=dag
     )
 
     end_task = DummyOperator(task_id='end')
