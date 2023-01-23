@@ -66,7 +66,11 @@ x-airflow-common:
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ./spark/app:/usr/local/spark/app
+    - ./covid_data:/usr/share/covid_data
   user: "${AIRFLOW_UID:-50000}:0"
+  networks:
+    - common-network
+
   
   depends_on:
     &airflow-common-depends-on
@@ -89,6 +93,8 @@ services:
       interval: 5s
       retries: 5
     restart: always
+    networks:
+      - common-network
 
   redis:
     image: redis:latest
@@ -100,6 +106,8 @@ services:
       timeout: 30s
       retries: 50
     restart: always
+    networks:
+      - common-network
 
   airflow-webserver:
     <<: *airflow-common
@@ -277,9 +285,42 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-        
+  spark:
+    image: docker.io/bitnami/spark:3.3
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '4040:8080'
+      - "7077:7077"
+    networks:
+      - common-network
+    volumes:
+      - ./spark/app:/usr/local/spark/app
+      - ./covid_data:/usr/share/covid_data
+  spark-worker:
+    image: docker.io/bitnami/spark:3.3
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    networks:
+      - common-network
+    volumes:
+      - ./covid_data:/usr/share/covid_data
+
+
 volumes:
   postgres-db-volume:
+  common-files:
 
 networks:
   common-network:

@@ -4,27 +4,20 @@ from datetime import datetime
 from calendar import monthrange
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
 
-##########################
-# You can configure master here if you do not pass the spark.master paramenter in conf
-##########################
-#master = "spark://spark:7077"
-#conf = SparkConf().setAppName("Spark Hello World").setMaster(master)
-#sc = SparkContext(conf=conf)
-#spark = SparkSession.builder.config(conf=conf).getOrCreate()
 
-# Create spark context
-sc = SparkContext()
+spark = SparkSession.builder.appName("merge_into_month").getOrCreate()
 
 execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").split('T')[0], '%Y-%m-%d')
 
 # .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
 
-def number_of_days_in_month(year, month):
-    return monthrange(year, month)[1]
+df = spark.read \
+    .option("header", "true") \
+    .option("inferSchema", "true") \
+    .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/")
 
-def merge_into_month(execution_date):
-    for i in range(0, number_of_days_in_month(execution_date.year, execution_date.month)):
-        print(i)
+df = df.withColumn("data",F.to_date(F.col("data"))) 
 
-merge_into_month(execution_date)
+df.write.parquet(f"/usr/share/covid_data/lake/{execution_date.strftime('%Y')}-{execution_date.strftime('%m')}.parquet", mode='overwrite')
