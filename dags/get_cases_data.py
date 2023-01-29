@@ -26,7 +26,7 @@ with DAG(
     )
 
     merge_into_month_task = SparkSubmitOperator(
-        task_id="merge_into_month_task",
+        task_id="merge_into_month",
         application="/usr/local/spark/app/merge_into_month.py",
         name="merge_into_month",
         conn_id="spark_default", # Should be configured to use spark_master
