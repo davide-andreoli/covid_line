@@ -11,8 +11,6 @@ spark = SparkSession.builder.appName("merge_into_month").getOrCreate()
 
 execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").split('T')[0], '%Y-%m-%d')
 
-# .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
-
 df = spark.read \
     .option("header", "true") \
     .option("inferSchema", "true") \
@@ -20,4 +18,6 @@ df = spark.read \
 
 df = df.withColumn("data",F.to_date(F.col("data"))) 
 
-df.write.parquet(f"/usr/share/covid_data/lake/{execution_date.strftime('%Y')}-{execution_date.strftime('%m')}.parquet", mode='overwrite')
+# Check if data is already there
+
+df.write.mode('append').partitionBy("data").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/cases_{execution_date.strftime('%m')}.parquet")

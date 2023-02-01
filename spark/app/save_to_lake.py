@@ -20,4 +20,4 @@ df = spark.read \
 
 df = df.withColumn("data",F.to_date(F.col("data"))) 
 
-df.write.parquet(f"/usr/share/covid_data/lake/cases_{execution_date.strftime('%Y%m%d')}.parquet", mode='overwrite')
+df.write.partitionBy("data").parquet(f"/usr/share/covid_data/pq/cases_{execution_date.strftime('%Y%m%d')}.parquet", mode='overwrite')
