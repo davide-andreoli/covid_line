@@ -61,7 +61,7 @@ x-airflow-common:
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
-    AIRFLOW__CONN__SPARK_DEFAULT: 'spark://@spark://spark:7077/'
+    AIRFLOW__CONN__SPARK_CONNECTION: 'spark://@spark://spark:7077/'
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
