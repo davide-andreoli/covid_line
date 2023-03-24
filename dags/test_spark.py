@@ -8,16 +8,16 @@ from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
 with DAG(
     dag_id="test_spark",
-    start_date=datetime(2022,12,20),
+    start_date=datetime(2023,1,9),
     end_date=datetime(2023,1,10),
     schedule_interval="@daily") as dag:
 
     start_task = DummyOperator(task_id='start')
 
-    merge_into_month_task = SparkSubmitOperator(
-        task_id="merge_into_month_task",
-        application="/usr/local/spark/app/merge_into_month.py",
-        name="merge_into_month",
+    save_to_warehouse = SparkSubmitOperator(
+        task_id="save_to_warehouse",
+        application="/usr/local/spark/app/save_to_warehouse.py",
+        name="save_to_warehouse",
         conn_id="spark_default", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
@@ -27,5 +27,5 @@ with DAG(
 
     end_task = DummyOperator(task_id='end')
 
-    start_task >> merge_into_month_task >> end_task
+    start_task >> save_to_warehouse >> end_task
 

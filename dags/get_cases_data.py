@@ -8,8 +8,9 @@ from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 
+# Only Italian data for now
 URL_PREFIX = 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/' 
-URL_TEMPLATE = URL_PREFIX + '/dpc-covid19-ita-andamento-nazionale-{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
+URL_TEMPLATE = URL_PREFIX + 'dpc-covid19-ita-andamento-nazionale-{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
 OUTPUT_FILE_TEMPLATE = '/usr/share/covid_data/raw/{{ execution_date.strftime(\'%Y\') }}/{{ execution_date.strftime(\'%m\') }}/cases_{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
 
 with DAG(
@@ -49,5 +50,5 @@ with DAG(
 
     end_task = DummyOperator(task_id='end')
 
-    start_task >> download_data_task >> merge_into_month_task >> end_task
+    start_task >> download_data_task >> merge_data_task >> save_to_warehouse >> end_task
 
