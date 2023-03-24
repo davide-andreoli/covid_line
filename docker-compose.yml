@@ -61,6 +61,7 @@ x-airflow-common:
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    AIRFLOW__CONN__SPARK_DEFAULT: 'spark://@spark://spark:7077/'
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -287,6 +288,9 @@ services:
         condition: service_completed_successfully
   spark:
     image: docker.io/bitnami/spark:3.3
+    build:
+      context: .
+      dockerfile: ./dockerfiles/spark.dockerfile
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -318,6 +322,9 @@ services:
       - ./covid_data:/usr/share/covid_data
   warehouse-db:
     image: postgres
+    build:
+      context: .
+      dockerfile: ./dockerfiles/postgres.dockerfile
     restart: always
     environment:
       POSTGRES_USER: airflow
