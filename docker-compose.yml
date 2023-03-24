@@ -316,11 +316,25 @@ services:
       - common-network
     volumes:
       - ./covid_data:/usr/share/covid_data
+  warehouse-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - '5432:5432'
+    volumes:
+      - warehouse-db-volume:/var/lib/postgresql/data
+    networks:
+      - common-network
 
 
 volumes:
   postgres-db-volume:
   common-files:
+  warehouse-db-volume:
 
 networks:
   common-network:

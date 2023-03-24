@@ -7,17 +7,19 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 
-spark = SparkSession.builder.appName("merge_into_month").getOrCreate()
+spark = SparkSession.builder.appName("merge_data").getOrCreate()
 
 execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").split('T')[0], '%Y-%m-%d')
 
 df = spark.read \
     .option("header", "true") \
     .option("inferSchema", "true") \
-    .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/")
+    .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.csv")
 
+# All the columns should be renamed here
 df = df.withColumn("data",F.to_date(F.col("data"))) 
 
-# Check if data is already there
+df.write.mode('overwrite').partitionBy("data").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
-df.write.mode('append').partitionBy("data").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/cases_{execution_date.strftime('%m')}.parquet")
+
+

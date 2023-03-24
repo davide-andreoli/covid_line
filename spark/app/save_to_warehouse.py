@@ -13,11 +13,3 @@ execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").
 
 # .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
 
-df = spark.read \
-    .option("header", "true") \
-    .option("inferSchema", "true") \
-    .csv(f"/usr/share/covid_data/lake/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/")
-
-df = df.withColumn("data",F.to_date(F.col("data"))) 
-
-df.write.parquet(f"/usr/share/covid_data/lake/{execution_date.strftime('%Y')}-{execution_date.strftime('%m')}.parquet", mode='overwrite')

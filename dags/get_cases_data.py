@@ -25,10 +25,21 @@ with DAG(
         bash_command=f'curl -sSL --create-dirs -o {OUTPUT_FILE_TEMPLATE} {URL_TEMPLATE}'
     )
 
-    merge_into_month_task = SparkSubmitOperator(
-        task_id="merge_into_month",
-        application="/usr/local/spark/app/merge_into_month.py",
-        name="merge_into_month",
+    merge_data_task = SparkSubmitOperator(
+        task_id="merge_data",
+        application="/usr/local/spark/app/merge_data.py",
+        name="merge_data",
+        conn_id="spark_default", # Should be configured to use spark_master
+        verbose=1,
+        conf={"spark.master":"spark://spark:7077"},
+        application_args=[],
+        dag=dag
+    )
+
+    save_to_warehouse = SparkSubmitOperator(
+        task_id="save_to_warehouse",
+        application="/usr/local/spark/app/save_to_warehouse.py",
+        name="save_to_warehouse",
         conn_id="spark_default", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
