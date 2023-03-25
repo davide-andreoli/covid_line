@@ -6,13 +6,17 @@ from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
+home_dir = os.path.expanduser('~')
+print(os.listdir(home_dir + '/spark'))
 
+spark_jars_packages = "org.postgresql:postgresql:42.5.1"
 
 spark = SparkSession \
     .builder \
     .appName("save_to_warehouse") \
-    .config("spark.jars", "~/spark/postgresql-42.5.4.jar") \
     .getOrCreate()
+
+    #.config("spark.jars", home_dir + '/spark' + "/postgresql-42.5.4.jar") \
 
 DB_URL = "jdbc:postgresql://warehouse-db:5432/airflow"
 DB_USER = 'airflow'

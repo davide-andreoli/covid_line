@@ -6,6 +6,8 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
+home_dir = os.path.expanduser('~')
+
 with DAG(
     dag_id="test_spark",
     start_date=datetime(2023,1,9),
@@ -21,6 +23,7 @@ with DAG(
         conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
+        jars = home_dir + '/spark' + "/postgresql-42.5.4.jar",
         application_args=[],
         dag=dag
     )

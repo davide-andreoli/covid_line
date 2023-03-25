@@ -288,9 +288,6 @@ services:
         condition: service_completed_successfully
   spark:
     image: docker.io/bitnami/spark:3.3
-    build:
-      context: .
-      dockerfile: ./dockerfiles/spark.dockerfile
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
