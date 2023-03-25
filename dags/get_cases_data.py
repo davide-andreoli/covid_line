@@ -41,7 +41,7 @@ with DAG(
         task_id="save_to_warehouse",
         application="/usr/local/spark/app/save_to_warehouse.py",
         name="save_to_warehouse",
-        conn_id="spark_default", # Should be configured to use spark_master
+        conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
         application_args=[],
