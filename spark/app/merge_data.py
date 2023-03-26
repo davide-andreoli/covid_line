@@ -16,8 +16,25 @@ df = spark.read \
     .option("inferSchema", "true") \
     .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.csv")
 
-# All the columns should be renamed here
-df = df.withColumn("data",F.to_date(F.col("data"))) 
+# Column renaming
+df = df.withColumnRenamed("data", "date")
+df = df.withColumnRenamed("nuovi_positivi", "new_positive_cases")
+df = df.withColumnRenamed("stato", "country_cod")
+
+
+# Data types transformation
+df = df.withColumn("date",F.to_date(F.col("date"))) 
+
+# New columns creation
+df = df.withColumn("id",F.md5(F.concat(F.col("date"),F.col("country_cod"))))
+
+# Select only relevant colums
+
+df = df.select("id","date","country_cod","new_positive_cases")
+
+
+
+
 
 df.write.mode('overwrite').partitionBy("data").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
