@@ -14,23 +14,18 @@ spark_jars_packages = "org.postgresql:postgresql:42.5.1"
 spark = SparkSession \
     .builder \
     .appName("save_to_warehouse") \
+    .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
+    .enableHiveSupport() \
     .getOrCreate()
 
     #.config("spark.jars", home_dir + '/spark' + "/postgresql-42.5.4.jar") \
+    #    .config("spark.sql.warehouse.dir", "/hive/warehouse/dir")
 
-DB_URL = "jdbc:postgresql://warehouse-db:5432/airflow"
-DB_USER = 'airflow'
-DB_PASSWORD = 'airflow'
+DB_URL_2 = "jdbc:hive2://hive-server:10000"
+DB_USER_2 = 'hive'
+DB_PASSWORD_2 = 'hive'
 
-
-df = spark.read \
-    .format("jdbc") \
-    .option("url", DB_URL) \
-    .option("dbtable", "movies") \
-    .option("user", "airflow") \
-    .option("password", "airflow") \
-    .option("driver", "org.postgresql.Driver") \
-    .load()
+df = spark.read.table("pokes")
 
 df.printSchema()
 
