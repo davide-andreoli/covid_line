@@ -8,7 +8,6 @@ from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 HOME_DIRECTORY = os.path.expanduser('~')
-POSTGRES_JAR_PATH =  HOME_DIRECTORY + '/spark' + "/postgresql-42.5.4.jar"
 
 # Only Italian data for now
 URL_PREFIX = 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/' 
@@ -46,7 +45,6 @@ with DAG(
         conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
-        jars = POSTGRES_JAR_PATH,
         application_args=[],
         dag=dag
     )
