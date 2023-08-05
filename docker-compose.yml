@@ -384,10 +384,7 @@ services:
     image: bde2020/hive-metastore-postgresql:2.3.0
     networks:
       - common-network
-  presto-coordinator:
-    image: shawnzhu/prestodb:0.181
-    ports:
-      - "3030:8080"
+
 
 volumes:
   postgres-db-volume:

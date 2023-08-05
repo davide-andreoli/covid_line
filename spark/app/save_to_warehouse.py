@@ -9,8 +9,6 @@ from pyspark.sql import functions as F
 home_dir = os.path.expanduser('~')
 print(os.listdir(home_dir + '/spark'))
 
-spark_jars_packages = "org.postgresql:postgresql:42.5.1"
-
 spark = SparkSession \
     .builder \
     .appName("save_to_warehouse") \
@@ -20,10 +18,6 @@ spark = SparkSession \
 
     #.config("spark.jars", home_dir + '/spark' + "/postgresql-42.5.4.jar") \
     #    .config("spark.sql.warehouse.dir", "/hive/warehouse/dir")
-
-DB_URL_2 = "jdbc:hive2://hive-server:10000"
-DB_USER_2 = 'hive'
-DB_PASSWORD_2 = 'hive'
 
 df = spark.read.table("pokes")
 
