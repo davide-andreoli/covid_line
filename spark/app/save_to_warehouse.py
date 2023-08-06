@@ -24,17 +24,19 @@ spark = SparkSession \
 df = spark.read \
     .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
-df.printSchema()
+
 
 if spark.catalog.tableExists("cases"):
     current_table = spark.read.table("cases")
     # Renoves matching rows from current table
     current_table.join(df, current_table.id == df.id, "leftanti")
     # Adds them back from the updated source
-    current_table.union(df)
+    current_table = current_table.union(df)
     # Save the table in hive
+    current_table.write.mode("overwrite").saveAsTable("temp_table")
+    new_table = spark.read.table("temp_table")
     # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then append
-    current_table.write.mode("overwrite").saveAsTable("cases")
+    new_table.write.mode("overwrite").insertInto("cases")
 else:
     df.write.mode("overwrite").saveAsTable("cases")
 
