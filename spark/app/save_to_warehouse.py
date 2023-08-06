@@ -9,32 +9,40 @@ from pyspark.sql import functions as F
 home_dir = os.path.expanduser('~')
 print(os.listdir(home_dir + '/spark'))
 
-spark_jars_packages = "org.postgresql:postgresql:42.5.1"
+execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").split('T')[0], '%Y-%m-%d')
 
 spark = SparkSession \
     .builder \
     .appName("save_to_warehouse") \
+    .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
+    .enableHiveSupport() \
     .getOrCreate()
 
     #.config("spark.jars", home_dir + '/spark' + "/postgresql-42.5.4.jar") \
-
-DB_URL = "jdbc:postgresql://warehouse-db:5432/airflow"
-DB_USER = 'airflow'
-DB_PASSWORD = 'airflow'
-
+    #    .config("spark.sql.warehouse.dir", "/hive/warehouse/dir")
 
 df = spark.read \
-    .format("jdbc") \
-    .option("url", DB_URL) \
-    .option("dbtable", "movies") \
-    .option("user", "airflow") \
-    .option("password", "airflow") \
-    .option("driver", "org.postgresql.Driver") \
-    .load()
+    .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
-df.printSchema()
 
-execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").split('T')[0], '%Y-%m-%d')
+
+if spark.catalog.tableExists("cases"):
+    current_table = spark.read.table("cases")
+    # Renoves matching rows from current table
+    current_table.join(df, current_table.id == df.id, "leftanti")
+    # Adds them back from the updated source
+    current_table = current_table.union(df)
+    # Save the table in hive
+    current_table.write.mode("overwrite").saveAsTable("temp_table")
+    new_table = spark.read.table("temp_table")
+    # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then append
+    new_table.write.mode("overwrite").insertInto("cases")
+else:
+    df.write.mode("overwrite").saveAsTable("cases")
+
+
 
 # .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
 
+  # docker-compose exec hive-server bash
+  # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
