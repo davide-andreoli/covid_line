@@ -27,13 +27,20 @@ df = spark.read \
 df.printSchema()
 
 if spark.catalog.tableExists("cases"):
-    print("exists")
-    # insert into temp table and merge
+    current_table = spark.read.table("cases")
+    # Renoves matching rows from current table
+    current_table.join(df, current_table.id == df.id, "leftanti")
+    # Adds them back from the updated source
+    current_table.union(df)
+    # Save the table in hive
+    # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then append
+    current_table.write.mode("overwrite").saveAsTable("cases")
 else:
-    # create table
-    print("no")
+    df.write.mode("overwrite").saveAsTable("cases")
 
 
 
 # .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
 
+  # docker-compose exec hive-server bash
+  # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
