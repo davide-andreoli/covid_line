@@ -15,11 +15,11 @@ df = spark.read \
     .option("inferSchema", "true") \
     .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.csv")
 
+# TO-DO: rename date to something else to free up reserved name, same for id
 # Column renaming
 df = df.withColumnRenamed("data", "date")
 df = df.withColumnRenamed("nuovi_positivi", "new_positive_cases")
 df = df.withColumnRenamed("stato", "country_cod")
-
 
 # Data types transformation
 df = df.withColumn("date",F.to_date(F.col("date"))) 
