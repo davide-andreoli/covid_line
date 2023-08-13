@@ -14,6 +14,7 @@ The raw data is extracted daily from the Protezione Civile's github repository, 
 
 ### Data extraction
 The data comes directly from the Protezione Civile's [Github Repository](https://github.com/pcm-dpc/COVID-19). They host a summary file containing all data directly, but since the aim of the project is to emulate a production pipeline as much as possible, I decided to extract the data from the daily uploads, even though this means that the data is really small as each file contains only one line.
+The pipeline is built to be ready to be expanded with other countries' data in the future.
 
 ### Data loading
 The data is stored as raw csv files in the raw folder, with the following folder structure.
@@ -24,7 +25,9 @@ Raw folder
     |    
     └-- Month folder
         |    
-        └-- file_date.csv  
+        └-- Day folder
+            |
+            └-- countrycode_cases_date.csv  
 ```
 The data is then read from the month folders and grouped into monthly parquet files, partitioned by date and stored in the pq folder, with the following folder structure.
 ```
@@ -32,7 +35,11 @@ Pq folder
 |    
 └-- Year folder  
     |    
-    └-- file_month.parquet
+    └-- Month folder
+        |    
+        └-- Day folder
+            |    
+            └-- cases.parquet
 ```
 One could argue that with such a dataset this step is useless, and would probably be right. However, keeping in mind the scope of the project, this step effectively emulates the loading of the data in a data lake, storing it efficiently for further queries.
 
