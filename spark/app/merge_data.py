@@ -13,7 +13,7 @@ execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").
 df = spark.read \
     .option("header", "true") \
     .option("inferSchema", "true") \
-    .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.csv")
+    .csv(f"/usr/share/covid_data/raw/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/ita_ases_{execution_date.strftime('%Y%m%d')}.csv")
 
 # TO-DO: rename date to something else to free up reserved name, same for id
 # Column renaming
@@ -31,7 +31,7 @@ df = df.withColumn("id",F.md5(F.concat(F.col("date"),F.col("country_cod"))))
 
 df = df.select("id","date","country_cod","new_positive_cases")
 
-df.write.mode('overwrite').partitionBy("country_cod").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
+df.write.mode('overwrite').partitionBy("country_cod").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
 
 

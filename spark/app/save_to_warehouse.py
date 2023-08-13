@@ -22,7 +22,7 @@ spark = SparkSession \
     #    .config("spark.sql.warehouse.dir", "/hive/warehouse/dir")
 
 df = spark.read \
-    .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
+    .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
 
 
