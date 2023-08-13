@@ -29,7 +29,7 @@ Raw folder
             |
             └-- countrycode_cases_date.csv  
 ```
-The data is then read from the month folders and grouped into monthly parquet files, partitioned by date and stored in the pq folder, with the following folder structure.
+The data is then read from the month folders and grouped into daily parquet files, partitioned by country code and stored in the pq folder, with the following folder structure.
 ```
 Pq folder
 |    
@@ -39,8 +39,8 @@ Pq folder
         |    
         └-- Day folder
             |    
-            └-- cases.parquet
+            └-- cases_date.parquet
 ```
 One could argue that with such a dataset this step is useless, and would probably be right. However, keeping in mind the scope of the project, this step effectively emulates the loading of the data in a data lake, storing it efficiently for further queries.
 
-I decided to group it by month partly because of its size, partly because it often makes sense to reason by month in this cases (even though by year makes probably even more sens). I am still evaluating other lake's designs.
+As of right now the maximum granularity is chosen, in order to easily reload onde day's data when needed. This is done becuase the same pipeline could be adapted to different datasets with few modifcations (e.g.: retail transactions). For the current exampole, as the data is very limited, and would be very limited even if all the countries were to be included, the convenience gain is minimal, but still I prefer this kind of design.
