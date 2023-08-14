@@ -17,9 +17,10 @@ spark = SparkSession \
     .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
     .enableHiveSupport() \
     .getOrCreate()
-
+    # TO DO: configure DB covid_data
+    # .config("spark.sql.warehouse.dir", "/usr/share/covid_data/warehouse") \
     #.config("spark.jars", home_dir + '/spark' + "/postgresql-42.5.4.jar") \
-    #    .config("spark.sql.warehouse.dir", "/hive/warehouse/dir")
+
 
 df = spark.read \
     .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
@@ -29,16 +30,22 @@ df = spark.read \
 if spark.catalog.tableExists("cases"):
     current_table = spark.read.table("cases")
     # Renoves matching rows from current table
-    current_table.join(df, current_table.id == df.id, "leftanti")
+    current_table = current_table.join(df, current_table.collection_id == df.collection_id, "leftanti")
     # Adds them back from the updated source
     current_table = current_table.union(df)
     # Save the table in hive
-    current_table.write.mode("overwrite").saveAsTable("temp_table")
-    new_table = spark.read.table("temp_table")
+    current_table.write.mode("overwrite").saveAsTable("cases_temp_table")
+    new_table = spark.read.table("cases_temp_table")
     # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then append
-    new_table.write.mode("overwrite").insertInto("cases")
+    new_table.write \
+        .mode("overwrite") \
+        .insertInto("cases")
+    spark.sql("DROP TABLE cases_temp_table")
 else:
-    df.write.mode("overwrite").saveAsTable("cases")
+    df.write \
+        .partitionBy("collection_date", "country_cod") \
+        .mode("overwrite") \
+        .saveAsTable("cases")
 
 
 
