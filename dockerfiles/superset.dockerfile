@@ -16,3 +16,5 @@ ENV SUPERSET_CONFIG_PATH /app/superset_config.py
 
 USER superset
 ENTRYPOINT [ "/superset-init.sh" ]
+
+# hive://hive@{hostname}:{port}/default
