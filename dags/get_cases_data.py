@@ -12,7 +12,7 @@ HOME_DIRECTORY = os.path.expanduser('~')
 # Only Italian data for now
 URL_PREFIX = 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/' 
 URL_TEMPLATE = URL_PREFIX + 'dpc-covid19-ita-andamento-nazionale-{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
-OUTPUT_FILE_TEMPLATE = '/usr/share/covid_data/raw/{{ execution_date.strftime(\'%Y\') }}/{{ execution_date.strftime(\'%m\') }}/cases_{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
+OUTPUT_FILE_TEMPLATE = '/usr/share/covid_data/raw/{{ execution_date.strftime(\'%Y\') }}/{{ execution_date.strftime(\'%m\') }}/{{ execution_date.strftime(\'%d\') }}/ita_cases_{{ execution_date.strftime(\'%Y%m%d\') }}.csv'
 
 with DAG(
     dag_id="get_cases_data",
@@ -31,9 +31,8 @@ with DAG(
         task_id="merge_data",
         application="/usr/local/spark/app/merge_data.py",
         name="merge_data",
-        conn_id="spark_default", # Should be configured to use spark_master
+        conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
-        conf={"spark.master":"spark://spark:7077"},
         application_args=[],
         dag=dag
     )
@@ -44,7 +43,6 @@ with DAG(
         name="save_to_warehouse",
         conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
-        conf={"spark.master":"spark://spark:7077"},
         application_args=[],
         dag=dag
     )
