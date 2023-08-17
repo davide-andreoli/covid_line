@@ -31,7 +31,7 @@ with DAG(
         task_id="merge_data",
         application="/usr/local/spark/app/merge_data.py",
         name="merge_data",
-        conn_id="spark_default", # Should be configured to use spark_master
+        conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
         conf={"spark.master":"spark://spark:7077"},
         application_args=[],
