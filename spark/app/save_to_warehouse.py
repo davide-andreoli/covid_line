@@ -23,30 +23,32 @@ df = spark.read \
 
 
 
-if spark.catalog.tableExists("cases"):
-    current_table = spark.read.table("cases")
+if spark.catalog.tableExists("covid_data","cases"):
+    current_table = spark.read.table("covid_data.cases")
     # Renoves matching rows from current table
     current_table = current_table.join(df, current_table.collection_id == df.collection_id, "leftanti")
     # Adds them back from the updated source
     current_table = current_table.union(df)
     # Save the table in hive
-    current_table.write.mode("overwrite").saveAsTable("cases_temp_table")
-    new_table = spark.read.table("cases_temp_table")
-    # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then append
+    current_table.write.mode("overwrite").saveAsTable("covid_data.cases_temp_table")
+    new_table = spark.read.table("covid_data.cases_temp_table")
+    # TO-DO: Change the processing logic to avoid rewriting the whole table --> delete and then insert
     new_table.write \
         .mode("overwrite") \
         .insertInto("cases")
-    spark.sql("DROP TABLE cases_temp_table")
+    spark.sql("DROP TABLE covid_data.cases_temp_table")
 else:
-    #spark.sql("CREATE DATABASE IF NOT EXISTS covid_data")
+    spark.sql("CREATE DATABASE IF NOT EXISTS covid_data")
+    #df.createOrReplaceTempView("temp_table")
+    #spark.sql("CREATE TABLE covid_data.cases AS SELECT * FROM temp_table")
     df.write \
         .partitionBy("collection_date", "country_cod") \
         .mode("overwrite") \
-        .saveAsTable("cases")
+        .saveAsTable("covid_data.cases")
 
 
 
-# .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
+# .master("spark://spark:7077") ? --> find a way to connect to Spark cluster 
 
   # docker-compose exec hive-server bash
   # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
