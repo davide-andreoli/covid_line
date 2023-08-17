@@ -363,6 +363,16 @@ services:
     image: bde2020/hive-metastore-postgresql:2.3.0
     networks:
       - common-network
+  
+  superset:
+    image: apache/superset
+    build:
+      context: .
+      dockerfile: ./dockerfiles/superset.dockerfile
+    ports:
+      - "8088:8088"
+    networks:
+      - common-network
 
 
 volumes:
