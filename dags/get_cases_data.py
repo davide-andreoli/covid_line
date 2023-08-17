@@ -33,7 +33,6 @@ with DAG(
         name="merge_data",
         conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
-        conf={"spark.master":"spark://spark:7077"},
         application_args=[],
         dag=dag
     )
@@ -44,7 +43,6 @@ with DAG(
         name="save_to_warehouse",
         conn_id="spark_connection", # Should be configured to use spark_master
         verbose=1,
-        conf={"spark.master":"spark://spark:7077"},
         application_args=[],
         dag=dag
     )
