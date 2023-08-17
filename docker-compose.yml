@@ -365,10 +365,14 @@ services:
       - common-network
   
   superset:
-    image: apache/superset
+    image: apache/superset:2.1.0
     build:
       context: .
       dockerfile: ./dockerfiles/superset.dockerfile
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_EMAIL=admin@superset.com
+      - ADMIN_PASSWORD=admin
     ports:
       - "8088:8088"
     networks:
