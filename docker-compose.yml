@@ -317,22 +317,6 @@ services:
       - common-network
     volumes:
       - ./covid_data:/usr/share/covid_data
-  warehouse-db:
-    image: postgres
-    build:
-      context: .
-      dockerfile: ./dockerfiles/postgres.dockerfile
-    restart: always
-    environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
-    ports:
-      - '5432:5432'
-    volumes:
-      - warehouse-db-volume:/var/lib/postgresql/data
-    networks:
-      - common-network
 
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
