@@ -12,9 +12,6 @@ ENV ADMIN_PASSWORD $ADMIN_PASSWORD
 COPY docker_entrypoints/superset/*.sh /superset-init.sh
 RUN chmod +x /superset-init.sh
 
-COPY docker_entrypoints/superset/superset_custom_init.py /superset_custom_init.py
-RUN chmod +x /superset_custom_init.py
-
 COPY docker_entrypoints/superset/import /superset_import
 RUN zip -r /import.zip /superset_import
 
