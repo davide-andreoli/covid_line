@@ -18,6 +18,7 @@ with DAG(
     dag_id="get_cases_data",
     start_date=datetime(2022,12,20),
     end_date=datetime(2023,1,10),
+    max_active_runs = 3,
     schedule_interval="@daily") as dag:
 
     start_task = DummyOperator(task_id='start')
