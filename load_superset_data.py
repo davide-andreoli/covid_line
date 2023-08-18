@@ -1,11 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 import shutil
-
+"""
+    The script is not working correctly as of right now, the file gets sent but can't be read from the server.
+"""
 superset_url = 'http://localhost:8088/'
 print(superset_url)
 
-#shutil.make_archive("import_dashboards", 'zip', "./docker_entrypoints/superset/import_dashboards")
+shutil.make_archive("import_dashboards", 'zip', "./docker_entrypoints/superset/import_dashboards")
 
 session = requests.Session()
 
