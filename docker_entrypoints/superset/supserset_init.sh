@@ -10,10 +10,8 @@ superset db upgrade
 superset superset init 
 
 # superset set_database_uri -d hive_connection -u hive://hive@hive-server:10000/default
-echo "datasources"
-superset import-datasources -p /import-connections.zip
-echo "dashboards"
-superset import-dashboards -p /import-dashboards.zip
+superset import-datasources -p /database_export.zip
+superset import-dashboards -p /dashboard_export.zip 
 
 # Starting server
 /bin/sh -c /usr/bin/run-server.sh

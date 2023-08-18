@@ -3,7 +3,7 @@ FROM apache/superset:2.1.0
 USER root
 
 RUN apt-get update && apt-get install -y zip unzip
-RUN pip install pyhive
+RUN pip install pyhive requests bs4
 
 ENV ADMIN_USERNAME $ADMIN_USERNAME
 ENV ADMIN_EMAIL $ADMIN_EMAIL
@@ -12,11 +12,11 @@ ENV ADMIN_PASSWORD $ADMIN_PASSWORD
 COPY docker_entrypoints/superset/*.sh /superset-init.sh
 RUN chmod +x /superset-init.sh
 
-COPY docker_entrypoints/superset/import_connections /superset_import_connections
-RUN zip -r /import_connections.zip /superset_import_connections
+COPY docker_entrypoints/superset/database_export /database_export
+RUN zip -r /database_export.zip /database_export
 
-COPY docker_entrypoints/superset/import_dashboards /superset_import_dashboards
-RUN zip -r /import_dashboards.zip /superset_import_dashboards
+COPY docker_entrypoints/superset/dashboard_export /dashboard_export
+RUN zip -r /dashboard_export.zip /dashboard_export
 
 COPY docker_entrypoints/superset/superset_config.py /app/
 ENV SUPERSET_CONFIG_PATH /app/superset_config.py
