@@ -12,8 +12,11 @@ ENV ADMIN_PASSWORD $ADMIN_PASSWORD
 COPY docker_entrypoints/superset/*.sh /superset-init.sh
 RUN chmod +x /superset-init.sh
 
-COPY docker_entrypoints/superset/import /superset_import
-RUN zip -r /import.zip /superset_import
+COPY docker_entrypoints/superset/import_connections /superset_import_connections
+RUN zip -r /import_connections.zip /superset_import_connections
+
+COPY docker_entrypoints/superset/import_dashboards /superset_import_dashboards
+RUN zip -r /import_dashboards.zip /superset_import_dashboards
 
 COPY docker_entrypoints/superset/superset_config.py /app/
 ENV SUPERSET_CONFIG_PATH /app/superset_config.py
