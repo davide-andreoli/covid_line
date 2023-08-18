@@ -3,7 +3,7 @@ FROM apache/superset:2.1.0
 USER root
 
 RUN apt-get update && apt-get install -y zip unzip
-RUN pip install pyhive bs4 requests
+RUN pip install pyhive
 
 ENV ADMIN_USERNAME $ADMIN_USERNAME
 ENV ADMIN_EMAIL $ADMIN_EMAIL
