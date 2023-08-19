@@ -13,7 +13,15 @@ As for tools, I chose to use only Apache tools, for different reasons:
 - I don't usually use them in my daily work, as I am working with different technologies
 - they are open source
 Here is a list of all the tools that are included and what they are used for:
-- Apache Airflow
+- Apache Airflow: orchestrator for all the workflows
+    - GUI can be accessed at [http://localhost:8080/](http://localhost:8080/)
+- Apache Spark: all data operations are run as Spark jobs
+    - Master GUI can be accessed at [http://localhost:4040/](http://localhost:4040/)
+- Apache Hadoop: used for HDFS support for Hive
+    - GUI can be accessed at [http://localhost:50075/](http://localhost:50075/)
+- Apache Hive: data warehousing over HDFS
+- Apache Superset: data visualization and dashboarding
+    - GUI can be accessed at [http://localhost:8088/](http://localhost:8088/)
 
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
@@ -68,11 +76,15 @@ The table structure is very simple, and can be seen below.
 
 ### Data visualization
 The data visualization tool of choice is Apache Superset, which is connected directly to the Hive Database.
-Dashboards can be defined as YAML files and later imported through the CLI, or even better created using the UI, exported and then imported back the next time the container will start.
+Dashboards can be defined as YAML files and later imported through the CLI, but as of right now the workflow I follow is:
+- edit the dashboard/charts using Superset UI
+- export the dashboard/chart using Superset API/CLI tool
+- unzip the archive and store the data inside the entrypoints folder (the unzipping part is not necessary and not advised from the Superset team, but it's more clear for the repo)
+- in the superset dockerfile, import the export folder and zip it for import into superset
+- in the superset entrypoint, execute the Superset CLI tool to import the exported zip file
 All the files can be found under:
 docker_entrypoints
 |    
 └-- superset  
     |    
     └-- dashboard/database_export
-The GUI can be accessed at http://localhost:8088/
