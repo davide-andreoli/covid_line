@@ -15,13 +15,16 @@ As for tools, I chose to use only Apache tools, for different reasons:
 Here is a list of all the tools that are included and what they are used for:
 - Apache Airflow: orchestrator for all the workflows
     - GUI can be accessed at [http://localhost:8080/](http://localhost:8080/)
+    - DAG files are stored into /dags which is then mounted to the docker container
 - Apache Spark: all data operations are run as Spark jobs
     - Master GUI can be accessed at [http://localhost:4040/](http://localhost:4040/)
+    - Spark scripts are stored into /spark/app which is then mounted to the docker container
 - Apache Hadoop: used for HDFS support for Hive
     - GUI can be accessed at [http://localhost:50075/](http://localhost:50075/)
 - Apache Hive: data warehousing over HDFS
 - Apache Superset: data visualization and dashboarding
     - GUI can be accessed at [http://localhost:8088/](http://localhost:8088/)
+    - Superset files are stored into /docker_entrypoiunts/superset/dashboard_export, which is copied into the container, zipped and imported using the Superset CLI
 
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
