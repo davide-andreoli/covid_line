@@ -12,6 +12,8 @@ As for tools, I chose to use only Apache tools, for different reasons:
 - most of them are really solid tools used in different production environments
 - I don't usually use them in my daily work, as I am working with different technologies
 - they are open source
+Here is a list of all the tools that are included and what they are used for:
+- Apache Airflow
 
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
