@@ -29,7 +29,9 @@ Here is a list of all the tools that are included and what they are used for:
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
 ## Overview
-The raw data is extracted daily from the Protezione Civile's github repository, and stored in a raw folder, from which it is extracted, grouped into months and converted to parquet files.
+The raw data is extracted daily from the Protezione Civile's github repository, and stored in a raw folder, from which it is extracted, modified and stored as Parquet files in a data lake (which is currently local).
+Data is then moved onto an Hive data warehouse from which it can be queried and visualized using Superset.
+![Pipeline representation.](/utils/pipeline.png)
 
 ### Data extraction
 The data comes directly from the Protezione Civile's [Github Repository](https://github.com/pcm-dpc/COVID-19). They host a summary file containing all data directly, but since the aim of the project is to emulate a production pipeline as much as possible, I decided to extract the data from the daily uploads, even though this means that the data is really small as each file contains only one line.
