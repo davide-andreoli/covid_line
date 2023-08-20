@@ -44,9 +44,6 @@ else:
         .mode("overwrite") \
         .saveAsTable("cases")
 
-
-
-# .master("spark://spark:7077") ? --> find a way to connect to Spark cluster
-
   # docker-compose exec hive-server bash
   # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
+  # hadoop dfs -rm -r hdfs://namenode:8020/user/hive/warehouse/cases
