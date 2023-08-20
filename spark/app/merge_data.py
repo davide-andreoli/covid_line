@@ -31,7 +31,9 @@ df = df.withColumn("collection_id",F.md5(F.concat(F.col("collection_date"),F.col
 
 df = df.select("collection_id","new_positive_cases","collection_date","country_cod")
 
-df.write.mode('overwrite').partitionBy("country_cod").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
+# df.write.mode('overwrite').partitionBy("country_cod").parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
+
+df.write.mode('overwrite').partitionBy("country_cod").parquet(f"hdfs://namenode:8020/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
 
 
