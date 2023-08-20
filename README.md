@@ -12,19 +12,25 @@ As for tools, I chose to use only Apache tools, for different reasons:
 - most of them are really solid tools used in different production environments
 - I don't usually use them in my daily work, as I am working with different technologies
 - they are open source
-Here is a list of all the tools that are included and what they are used for:
+No tools is really production ready, but for the sake of robustness most of them have been set up in a way that emulates a production ready setup, at least in terms of structure (Airflow uses a dedicated worker, same for Spark, etc.).
+.Here is a list of all the tools that are included and what they are used for:
 - Apache Airflow: orchestrator for all the workflows
     - GUI can be accessed at [http://localhost:8080/](http://localhost:8080/)
     - DAG files are stored into /dags which is then mounted to the docker container
+    - The environment emulates a production environment, using CeleryExecutor and a dedicated worker and triggerer
 - Apache Spark: all data operations are run as Spark jobs
     - Master GUI can be accessed at [http://localhost:4040/](http://localhost:4040/)
     - Spark scripts are stored into /spark/app which is then mounted to the docker container
+    - The environment emulates a production environment, using one master and one worker
 - Apache Hadoop: used for HDFS support for Hive
     - GUI can be accessed at [http://localhost:50075/](http://localhost:50075/)
+    - The environment emulates a production environment, with one namenode and one datanode
 - Apache Hive: data warehousing over HDFS
+    - The environment emulates a production environment, using the main server and a metastore, with PostgreSQL as a backend
 - Apache Superset: data visualization and dashboarding
     - GUI can be accessed at [http://localhost:8088/](http://localhost:8088/)
     - Superset files are stored into /docker_entrypoiunts/superset/dashboard_export, which is copied into the container, zipped and imported using the Superset CLI
+    - The environment does not (yet) emulate a production environment
 
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
