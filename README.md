@@ -12,7 +12,7 @@ As for tools, I chose to use only Apache tools, for different reasons:
 - most of them are really solid tools used in different production environments
 - I don't usually use them in my daily work, as I am working with different technologies
 - they are open source
-No tools is really production ready, but for the sake of robustness most of them have been set up in a way that emulates a production ready setup, at least in terms of structure (Airflow uses a dedicated worker, same for Spark, etc.).
+No tools is really production ready, but for the sake of robustness most of them have been set up in a way that emulates a production setup, at least in terms of structure (Airflow uses a dedicated worker, same for Spark, etc.).
 .Here is a list of all the tools that are included and what they are used for:
 - Apache Airflow: orchestrator for all the workflows
     - GUI can be accessed at [http://localhost:8080/](http://localhost:8080/)
