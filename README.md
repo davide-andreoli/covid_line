@@ -56,7 +56,7 @@ Raw folder
             |
             └-- countrycode_cases_date.csv  
 ```
-The data is then read from the month folders and grouped into daily parquet files, partitioned by country code and stored in the pq folder, with the following folder structure.
+The data is then read from the daily folders and grouped into daily parquet files, partitioned by country code and stored in HDFS, with the following folder structure.
 ```
 Pq folder
 |    
@@ -68,11 +68,12 @@ Pq folder
             |    
             └-- cases_date.parquet
 ```
-One could argue that with such a dataset this step is useless, and would probably be right. However, keeping in mind the scope of the project, this step effectively emulates the loading of the data in a data lake, storing it efficiently for further queries.
 
-As of right now the maximum granularity is chosen, in order to easily reload onde day's data when needed. This is done becuase the same pipeline could be adapted to different datasets with few modifcations (e.g.: retail transactions). For the current exampole, as the data is very limited, and would be very limited even if all the countries were to be included, the convenience gain is minimal, but still I prefer this kind of design.
+The maximum granularity is chosen, in order to easily reload onde day's data when needed. This is done becuase the same pipeline could be adapted to different datasets with few modifcations (e.g.: retail transactions). For the current example, as the data is very limited, and would be very limited even if all the countries were to be included, the convenience gain is minimal, but still I prefer this kind of design.
 
 This folder structure will be kept even for future data (for example: vaccination).
+
+As of right now there data comes only from one country, but the pipeline is designed with the idea that it could be upgraded to extract data from other countries as well.
 
 ### Data warehousing
 In order to support different analytical tasks and SQL-like queries, raw data is stored inside Hive.
