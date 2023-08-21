@@ -19,7 +19,7 @@ spark = SparkSession \
     # TO DO: configure DB covid_data
 
 df = spark.read \
-    .parquet(f"/usr/share/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
+    .parquet(f"hdfs://namenode:8020/covid_data/pq/{execution_date.strftime('%Y')}/{execution_date.strftime('%m')}/{execution_date.strftime('%d')}/cases_{execution_date.strftime('%Y%m%d')}.parquet")
 
 
 
