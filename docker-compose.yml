@@ -6,16 +6,14 @@ x-airflow-common:
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.0}
   build:
-    context: .
-    dockerfile: ./Dockerfile
+    context: ./docker/airflow
+    dockerfile: ./airflow.dockerfile
   environment:
     &airflow-common-env
-    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     # For backward compatibility, with Airflow <2.3
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
@@ -34,44 +32,21 @@ x-airflow-common:
   profiles:
     - pipeline
     - airflow
-
-  
   depends_on:
     &airflow-common-depends-on
-    redis:
-      condition: service_healthy
     postgres:
-      condition: service_healthy
+      condition: service_completed_successfully
 
 services:
   postgres:
     image: postgres:13
+    container_name: airflow-postgres
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
-    restart: always
-    networks:
-      - common-network
-    profiles:
-      - pipeline
-      - airflow
-
-  redis:
-    image: redis:latest
-    expose:
-      - 6379
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 30s
-      retries: 50
     restart: always
     networks:
       - common-network
@@ -82,13 +57,9 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    container_name: airflow-webserver
     ports:
       - 8080:8080
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -98,32 +69,7 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
-    healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
-
-  airflow-worker:
-    <<: *airflow-common
-    command: celery worker
-    healthcheck:
-      test:
-        - "CMD-SHELL"
-        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    environment:
-      <<: *airflow-common-env
-      # Required to handle warm shutdown of the celery workers properly
-      # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
-      DUMB_INIT_SETSID: "0"
+    container_name: airflow-scheduler
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -133,11 +79,7 @@ services:
   airflow-triggerer:
     <<: *airflow-common
     command: triggerer
-    healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    container_name: airflow-triggerer
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -146,6 +88,7 @@ services:
 
   airflow-init:
     <<: *airflow-common
+    container_name: airflow-init
     entrypoint: /bin/bash
     # yamllint disable rule:line-length
     command:
@@ -222,39 +165,6 @@ services:
     volumes:
       - .:/sources
 
-  airflow-cli:
-    <<: *airflow-common
-    profiles:
-      - debug
-    environment:
-      <<: *airflow-common-env
-      CONNECTION_CHECK_MAX_COUNT: "0"
-    # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
-    command:
-      - bash
-      - -c
-      - airflow
-
-  # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
-  # or by explicitly targeted on the command line e.g. docker-compose up flower.
-  # See: https://docs.docker.com/compose/profiles/
-  flower:
-    <<: *airflow-common
-    command: celery flower
-    profiles:
-      - flower
-    ports:
-      - 5555:5555
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
   spark-master:
     image: bitnami/spark:3.1.2
     container_name: spark-master

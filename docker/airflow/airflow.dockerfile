@@ -9,7 +9,7 @@ USER $AIRFLOW_UID
 
 # RUN airflow connections add 'spark_connection' --conn-json '{"conn_type": "spark","host": "spark://spark","port": 7077}'
 
-RUN curl https://jdbc.postgresql.org/download/postgresql-42.5.4.jar --create-dirs -o ~/spark/postgresql-42.5.4.jar
+# RUN curl https://jdbc.postgresql.org/download/postgresql-42.5.4.jar --create-dirs -o ~/spark/postgresql-42.5.4.jar
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
