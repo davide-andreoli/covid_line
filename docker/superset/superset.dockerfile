@@ -9,16 +9,16 @@ ENV ADMIN_USERNAME $ADMIN_USERNAME
 ENV ADMIN_EMAIL $ADMIN_EMAIL
 ENV ADMIN_PASSWORD $ADMIN_PASSWORD
 
-COPY docker_entrypoints/superset/*.sh /superset-init.sh
+COPY ./*.sh /superset-init.sh
 RUN chmod +x /superset-init.sh
 
-COPY docker_entrypoints/superset/database_export /database_export
+COPY ./database_export /database_export
 RUN zip -r /database_export.zip /database_export
 
-COPY docker_entrypoints/superset/dashboard_export /dashboard_export
+COPY ./dashboard_export /dashboard_export
 RUN zip -r /dashboard_export.zip /dashboard_export
 
-COPY docker_entrypoints/superset/superset_config.py /app/
+COPY ./superset_config.py /app/
 ENV SUPERSET_CONFIG_PATH /app/superset_config.py
 
 USER superset
