@@ -375,6 +375,8 @@ services:
       - superset
   zeppelin:
     image: apache/zeppelin:0.10.1
+    container_name: zeppelin
+    hostname: zeppelin
     build:
       context: .
       dockerfile: ./dockerfiles/zeppelin.dockerfile
