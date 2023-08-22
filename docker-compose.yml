@@ -310,14 +310,12 @@ services:
       - pipeline
       - zeppelin
 
-
 volumes:
   postgres-db-volume:
   common-files:
   warehouse-db-volume:
   namenode:
   datanode:
-
 
 networks:
   common-network:
