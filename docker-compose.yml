@@ -292,8 +292,8 @@ services:
     container_name: zeppelin
     hostname: zeppelin
     build:
-      context: .
-      dockerfile: ./dockerfiles/zeppelin.dockerfile
+      context: ./docker/zeppelin
+      dockerfile: ./zeppelin.dockerfile
     ports:
       - "2020:8080"
     volumes:
