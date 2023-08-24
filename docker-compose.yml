@@ -355,7 +355,6 @@ services:
     depends_on:
       - spark-master
     profiles:
-      - pipeline
       - zeppelin
 
 volumes:
