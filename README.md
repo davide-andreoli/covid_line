@@ -25,6 +25,17 @@ No tools is really production ready, but for the sake of robustness most of them
 - Apache Hadoop: used for HDFS support for Hive
     - GUI can be accessed at [http://localhost:50075/](http://localhost:50075/)
     - The environment emulates a production environment, with one namenode and one datanode
+    - If you have issues when starting the cluster, please give 777 permissions to the local datanode and namenode folders
+    - If you get issues about the NameNode not being formatted please delete everything inside the local folders, modify the environment section as 
+        ```yml
+        #ENSURE_NAMENODE_DIR: "/hadoop/dfs/name"
+        ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+        ```
+        run ```docker compose --profile hadoop up ```, when the cluster successfully starts bring it down and change the environment back to
+        ```yml
+        ENSURE_NAMENODE_DIR: "/hadoop/dfs/name"
+        #ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+        ```
 - Apache Hive: data warehousing over HDFS
     - The environment emulates a production environment, using the main server and a metastore, with PostgreSQL as a backend
 - Apache Superset: data visualization and dashboarding
