@@ -207,37 +207,32 @@ services:
 
   namenode:
     image: apache/hadoop:3
-    hostname: namenode
-    container_name: namenode
     command: ["hdfs", "namenode"]
-    volumes:
-      - namenode:/hadoop/dfs/name
     environment:
-      CLUSTER_NAME: test
-      ENSURE_NAMENODE_DIR : "/tmp/hadoop-root/dfs/name"
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-hadoop/dfs/name"
     env_file:
       - ./docker/hadoop/config
     ports:
       - "9870:9870"
     networks:
       - common-network
+    volumes:
+      - ./covid_data/namenode:/tmp/hadoop-hadoop/dfs/name
     profiles:
       - pipeline
       - hadoop
+
   datanode:
     image: apache/hadoop:3
-    container_name: datanode
     command: ["hdfs", "datanode"]
-    volumes:
-      - datanode:/hadoop/dfs/data
     env_file:
       - ./docker/hadoop/config
-    ports:
-      - "50075:50075"
     networks:
       - common-network
     depends_on:
       - namenode
+    volumes:
+      - ./covid_data/datanode:/tmp/hadoop-hadoop/dfs/data
     profiles:
       - pipeline
       - hadoop
@@ -366,8 +361,8 @@ volumes:
   airflow-db-volume:
   common-files:
   hive-db-volume:
-  namenode:
-  datanode:
+  namenode-data:
+  datanode-data:
   warehouse:
 
 networks:
