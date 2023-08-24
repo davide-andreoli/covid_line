@@ -333,7 +333,6 @@ services:
     networks:
       - common-network
     profiles:
-      - pipeline
       - superset
   zeppelin:
     image: apache/zeppelin:0.10.1
