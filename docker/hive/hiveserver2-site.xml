@@ -65,8 +65,8 @@
         <value>tez</value>
     </property>
     <property>
-        <name>metastore.warehouse.dir</name>
-        <value>/opt/hive/data/warehouse</value>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>/user/hive/warehouse</value>
     </property>
     <property>
         <name>metastore.metastore.event.db.notification.api.auth</name>

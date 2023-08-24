@@ -7,6 +7,8 @@ RUN apt-get update && \
 
 COPY ./hivemetastore-site.xml /opt/hive/conf/hivemetastore-site.xml
 COPY ./hiveserver2-site.xml /opt/hive/conf/hiveserver2-site.xml
+COPY ./core-site.xml /opt/hive/conf/core-site.xml
+COPY ./hdfs-site.xml /opt/hive/conf/hdfs-site.xml
 COPY init-hive-db.sh /opt/hive/init/
 RUN chmod +x /opt/hive/init/init-hive-db.sh
 
