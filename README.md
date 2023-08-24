@@ -42,6 +42,7 @@ No tools is really production ready, even though the structure of them is fine I
     - Superset files are stored into /docker_entrypoiunts/superset/dashboard_export, which is copied into the container, zipped and imported using the Superset CLI
 - Apache Zeppelin: data exploration and notebooks
     - GUI can be accessed at [http://localhost:2020/](http://localhost:2020/)
+    - This service is kept out of the pipeline as it has no place in the pipeline itself, it's just there for data exploration and notebooks usage, but it can be started running ```docker compose --profile zeppelin up ``` when the rest of the pipeline is running
 
 # Architecture
 In this section I will go throught the architecture of the pipeline, starting from the general overview and then going into more details.
