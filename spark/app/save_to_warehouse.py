@@ -9,9 +9,9 @@ execution_date = datetime.strptime(os.environ.get("AIRFLOW_CTX_EXECUTION_DATE").
 spark = SparkSession \
     .builder \
     .appName("save_to_warehouse") \
-    .config("fs.defaultFS", "hdfs://namenode:8020") \
-    .config("spark.sql.warehouse.dir", "/user/hive/warehouse") \
+    .config("hive.exec.scratchdir", "hdfs://namenode:8020/opt/hive/scratch_dir") \
     .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
+    .config("spark.sql.warehouse.dir", "/user/hive/warehouse") \
     .enableHiveSupport() \
     .getOrCreate()
     # TO DO: configure DB covid_data
@@ -36,7 +36,6 @@ if "cases" in spark.catalog.listTables():
     spark.sql("DROP TABLE cases_temp_table")
 else:
     #spark.sql("CREATE DATABASE IF NOT EXISTS covid_data")
-    print("i'm here")
     df.write \
         .partitionBy("collection_date", "country_cod") \
         .mode("overwrite") \
