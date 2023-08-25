@@ -1,8 +1,8 @@
 CORE-SITE.XML_fs.default.name=hdfs://namenode
 CORE-SITE.XML_fs.defaultFS=hdfs://namenode
 CORE-SITE.XML_hadoop.http.staticuser.user=root
-CORE-SITE.XMLhadoop.proxyuser.hue.hosts=*
-CORE-SITE.XMLhadoop.proxyuser.hue.groups=*
+CORE-SITE.XML_hadoop.proxyuser.hue.hosts=*
+CORE-SITE.XML_hadoop.proxyuser.hue.groups=*
 
 HDFS-SITE.XML_dfs.namenode.rpc-address=namenode:8020
 HDFS-SITE.XML_dfs.replication=1

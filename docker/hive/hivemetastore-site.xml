@@ -70,7 +70,11 @@
     </property>
     <property>
         <name>hive.metastore.warehouse.dir</name>
-        <value>/user/hive/warehouse</value>
+        <value>/opt/hive/data/warehouse</value>
+    </property>
+    <property>
+        <name>hive.exec.scratchdir</name>
+        <value>/opt/hive/scratch_dir</value>
     </property>
     <property>
         <name>metastore.metastore.event.db.notification.api.auth</name>
