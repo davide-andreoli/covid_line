@@ -350,7 +350,7 @@ services:
       - "2020:8080"
     volumes:
       - ./spark:/zeppelin/spark
-      - ./notebooks:/zeppelin/notebook
+      - ./notebooks:/opt/zeppelin/notebook
     environment:
       - "MASTER=spark://spark-master:7077"
       - "SPARK_MASTER=spark://spark-master:7077"
