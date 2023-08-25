@@ -1,7 +1,7 @@
 FROM apache/zeppelin:0.10.1
 
 ENV BASE_URL=https://archive.apache.org/dist/spark/
-ENV SPARK_VERSION=3.1.2
+ENV SPARK_VERSION=3.1.3
 ENV HADOOP_VERSION=3.2
 
 USER root
