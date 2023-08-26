@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y python3
 
 # Install python 3.9 with pyenv and make it global
 
-RUN pip install pyspark==3.1.3 findspark ipython
+RUN pip install pyspark==3.1.3 findspark ipython requests
 
 
 
