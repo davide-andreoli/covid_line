@@ -171,6 +171,9 @@ services:
 
   spark-master:
     image: apache/spark-py:v3.1.3
+    build:
+      context: ./docker/spark
+      dockerfile: spark.dockerfile
     container_name: spark-master
     hostname: spark-master
     ports:
@@ -194,6 +197,9 @@ services:
     image: apache/spark-py:v3.1.3
     container_name: spark-worker
     hostname: spark-worker
+    build:
+      context: ./docker/spark
+      dockerfile: spark.dockerfile
     depends_on:
       - spark-master
     ports:
@@ -351,6 +357,7 @@ services:
     volumes:
       - ./spark:/zeppelin/spark
       - ./notebooks:/opt/zeppelin/notebook
+      - ./covid_data:/usr/share/covid_data
     environment:
       - "MASTER=spark://spark-master:7077"
       - "SPARK_MASTER=spark://spark-master:7077"
