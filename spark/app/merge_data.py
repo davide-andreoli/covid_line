@@ -22,7 +22,7 @@ df = df.withColumnRenamed("nuovi_positivi", "new_positive_cases")
 df = df.withColumnRenamed("stato", "country_cod")
 
 # Data types transformation
-df = df.withColumn("date",F.to_date(F.col("collection_date"))) 
+df = df.withColumn("collection_date",F.to_date(F.col("collection_date"))) 
 
 # New columns creation
 df = df.withColumn("collection_id",F.md5(F.concat(F.col("collection_date"),F.col("country_cod"))))
