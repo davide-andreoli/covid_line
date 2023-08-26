@@ -40,6 +40,7 @@ No tools is really production ready, even though the structure of them is fine I
 - Apache Superset: data visualization and dashboarding
     - GUI can be accessed at [http://localhost:8088/](http://localhost:8088/)
     - Superset files are stored into /docker_entrypoiunts/superset/dashboard_export, which is copied into the container, zipped and imported using the Superset CLI
+    - This service is kept out of the pipeline for performance's sake, but it can be started running ```docker compose --profile superset up ``` when the rest of the pipeline is running
 - Apache Zeppelin: data exploration and notebooks
     - GUI can be accessed at [http://localhost:2020/](http://localhost:2020/)
     - This service is kept out of the pipeline as it has no place in the pipeline itself, it's just there for data exploration and notebooks usage, but it can be started running ```docker compose --profile zeppelin up ``` when the rest of the pipeline is running
@@ -53,7 +54,7 @@ Data is then moved onto an Hive data warehouse from which it can be queried and 
 
 ### Data extraction
 The data comes directly from the Protezione Civile's [Github Repository](https://github.com/pcm-dpc/COVID-19). They host a summary file containing all data directly, but since the aim of the project is to emulate a production pipeline as much as possible, I decided to extract the data from the daily uploads, even though this means that the data is really small as each file contains only one line.
-The pipeline is built to be ready to be expanded with other countries' data in the future.
+The pipeline is built with the possibility to be expanded with other countries' data in the future in mind (that's why the step is called merge_data).
 
 ### Data loading
 The data is stored as raw csv files in the raw folder, with the following folder structure.
@@ -112,3 +113,8 @@ docker_entrypoints
 └-- superset  
     |    
     └-- dashboard/database_export
+
+# How to run
+Running the pipeline is pretty simple, you just have to run ```docker compose --profile pipeline --build up ```. When the containers are fully oeprational you can access the different user interfaces at the links provided.
+If you want you can also start the visualisation and explorations containers by running ```docker compose --profile superset --build up ``` and ```docker compose --profile zeppelin --build up ``` respectively.
+By default the data is limited to just a very small window, in order to keep the performance and space requirements low, but you can simply modify the start_date and end_date parameters for the DAGs.
