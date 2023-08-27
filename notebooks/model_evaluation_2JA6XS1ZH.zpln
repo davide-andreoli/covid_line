@@ -119,7 +119,7 @@
     {
       "text": "%pyspark\n# Relevant imports\nfrom pyspark import SparkFiles\nfrom pyspark.sql import functions as F",
       "user": "anonymous",
-      "dateUpdated": "2023-08-27 16:56:08.021",
+      "dateUpdated": "2023-08-27 16:56:56.978",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -148,12 +148,14 @@
       "jobName": "paragraph_1693155368021_2037496782",
       "id": "paragraph_1693041790499_1993314575",
       "dateCreated": "2023-08-27 16:56:08.021",
-      "status": "READY"
+      "dateStarted": "2023-08-27 16:56:57.017",
+      "dateFinished": "2023-08-27 16:57:21.950",
+      "status": "FINISHED"
     },
     {
       "text": "%pyspark\ndf \u003d spark.read \\\n    .option(\"header\", \"true\") \\\n    .option(\"inferSchema\", \"true\") \\\n    .csv(f\"/usr/share/covid_data/raw/full.csv\")\ndf.printSchema()",
       "user": "anonymous",
-      "dateUpdated": "2023-08-27 16:56:08.021",
+      "dateUpdated": "2023-08-27 16:57:24.843",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -182,30 +184,30 @@
         ]
       },
       "apps": [],
-      "runtimeInfos": {},
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d1"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1693155368021_1041571339",
       "id": "paragraph_1693041878008_33305209",
       "dateCreated": "2023-08-27 16:56:08.021",
-      "status": "READY"
-    },
-    {
-      "text": "%pyspark\n",
-      "user": "anonymous",
-      "dateUpdated": "2023-08-27 16:56:08.022",
-      "progress": 0,
-      "config": {},
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "apps": [],
-      "runtimeInfos": {},
-      "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1693155368022_1713817805",
-      "id": "paragraph_1693065493151_850213405",
-      "dateCreated": "2023-08-27 16:56:08.022",
-      "status": "READY"
+      "dateStarted": "2023-08-27 16:57:24.885",
+      "dateFinished": "2023-08-27 16:57:35.051",
+      "status": "FINISHED"
     },
     {
       "text": "%md\n## Data cleaning\nData is cleaned by performing the following steps:\n- columns are renamed from italian to english\n- datatypes are adjusted when necessary\n",
@@ -249,9 +251,9 @@
       "status": "READY"
     },
     {
-      "text": "%pyspark\n# Column renaming\ndf \u003d df.withColumnRenamed(\"data\", \"collection_date\")\ndf \u003d df.withColumnRenamed(\"nuovi_positivi\", \"new_positive_cases\")\ndf \u003d df.withColumnRenamed(\"stato\", \"country_cod\")\ndf \u003d df.withColumnRenamed(\"ricoverati_con_sintomi\", \"admitted_with_symptoms\")\ndf \u003d df.withColumnRenamed(\"terapia_intensiva\", \"intensive_care\")\n\n# Data types transformation\ndf \u003d df.withColumn(\"collection_date\",F.to_date(F.col(\"collection_date\"))) \n\n# New columns creation\ndf \u003d df.withColumn(\"collection_id\",F.md5(F.concat(F.col(\"collection_date\"),F.col(\"country_cod\"))))",
+      "text": "%pyspark\n# Column renaming\ndf \u003d df.withColumnRenamed(\"data\", \"collection_date\")\ndf \u003d df.withColumnRenamed(\"nuovi_positivi\", \"new_positive_cases\")\ndf \u003d df.withColumnRenamed(\"stato\", \"country_cod\")\ndf \u003d df.withColumnRenamed(\"ricoverati_con_sintomi\", \"admitted_with_symptoms\")\ndf \u003d df.withColumnRenamed(\"terapia_intensiva\", \"intensive_care\")\ndf \u003d df.withColumnRenamed(\"totale_ospedalizzati\", \"hospitalized_total\")\ndf \u003d df.withColumnRenamed(\"isolamento_domiciliare\", \"home_isolation\")\ndf \u003d df.withColumnRenamed(\"totale_positivi\", \"total_positive_cases\")\ndf \u003d df.withColumnRenamed(\"variazione_totale_positivi\", \"total_positive_cases_variation\")\ndf \u003d df.withColumnRenamed(\"casi_da_sospetto_diagnostico\", \"diagnostic_suspicion_cases\")\n\n# Data types transformation\ndf \u003d df.withColumn(\"collection_date\",F.to_date(F.col(\"collection_date\"))) \n\n# New columns creation\ndf \u003d df.withColumn(\"collection_id\",F.md5(F.concat(F.col(\"collection_date\"),F.col(\"country_cod\"))))",
       "user": "anonymous",
-      "dateUpdated": "2023-08-27 16:56:08.022",
+      "dateUpdated": "2023-08-27 17:00:24.215",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -280,12 +282,14 @@
       "jobName": "paragraph_1693155368022_1158182763",
       "id": "paragraph_1693042099009_1716716946",
       "dateCreated": "2023-08-27 16:56:08.022",
-      "status": "READY"
+      "dateStarted": "2023-08-27 16:57:33.414",
+      "dateFinished": "2023-08-27 16:57:35.399",
+      "status": "FINISHED"
     },
     {
       "text": "%pyspark\ndf.printSchema()",
       "user": "anonymous",
-      "dateUpdated": "2023-08-27 16:56:08.022",
+      "dateUpdated": "2023-08-27 16:57:42.006",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -309,7 +313,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "root\n |-- collection_date: date (nullable \u003d true)\n |-- country_cod: string (nullable \u003d true)\n |-- ricoverati_con_sintomi: integer (nullable \u003d true)\n |-- terapia_intensiva: integer (nullable \u003d true)\n |-- totale_ospedalizzati: integer (nullable \u003d true)\n |-- isolamento_domiciliare: integer (nullable \u003d true)\n |-- totale_positivi: integer (nullable \u003d true)\n |-- variazione_totale_positivi: integer (nullable \u003d true)\n |-- new_positive_cases: integer (nullable \u003d true)\n |-- dimessi_guariti: integer (nullable \u003d true)\n |-- deceduti: integer (nullable \u003d true)\n |-- casi_da_sospetto_diagnostico: integer (nullable \u003d true)\n |-- casi_da_screening: integer (nullable \u003d true)\n |-- totale_casi: integer (nullable \u003d true)\n |-- tamponi: integer (nullable \u003d true)\n |-- casi_testati: integer (nullable \u003d true)\n |-- note: string (nullable \u003d true)\n |-- ingressi_terapia_intensiva: integer (nullable \u003d true)\n |-- note_test: string (nullable \u003d true)\n |-- note_casi: string (nullable \u003d true)\n |-- totale_positivi_test_molecolare: integer (nullable \u003d true)\n |-- totale_positivi_test_antigenico_rapido: integer (nullable \u003d true)\n |-- tamponi_test_molecolare: integer (nullable \u003d true)\n |-- tamponi_test_antigenico_rapido: integer (nullable \u003d true)\n |-- collection_id: string (nullable \u003d true)\n\n"
+            "data": "root\n |-- collection_date: date (nullable \u003d true)\n |-- country_cod: string (nullable \u003d true)\n |-- admitted_with_symptoms: integer (nullable \u003d true)\n |-- intensive_care: integer (nullable \u003d true)\n |-- totale_ospedalizzati: integer (nullable \u003d true)\n |-- isolamento_domiciliare: integer (nullable \u003d true)\n |-- totale_positivi: integer (nullable \u003d true)\n |-- variazione_totale_positivi: integer (nullable \u003d true)\n |-- new_positive_cases: integer (nullable \u003d true)\n |-- dimessi_guariti: integer (nullable \u003d true)\n |-- deceduti: integer (nullable \u003d true)\n |-- casi_da_sospetto_diagnostico: integer (nullable \u003d true)\n |-- casi_da_screening: integer (nullable \u003d true)\n |-- totale_casi: integer (nullable \u003d true)\n |-- tamponi: integer (nullable \u003d true)\n |-- casi_testati: integer (nullable \u003d true)\n |-- note: string (nullable \u003d true)\n |-- ingressi_terapia_intensiva: integer (nullable \u003d true)\n |-- note_test: string (nullable \u003d true)\n |-- note_casi: string (nullable \u003d true)\n |-- totale_positivi_test_molecolare: integer (nullable \u003d true)\n |-- totale_positivi_test_antigenico_rapido: integer (nullable \u003d true)\n |-- tamponi_test_molecolare: integer (nullable \u003d true)\n |-- tamponi_test_antigenico_rapido: integer (nullable \u003d true)\n |-- collection_id: string (nullable \u003d true)\n\n"
           }
         ]
       },
@@ -319,7 +323,9 @@
       "jobName": "paragraph_1693155368022_692457003",
       "id": "paragraph_1693064581294_12888142",
       "dateCreated": "2023-08-27 16:56:08.022",
-      "status": "READY"
+      "dateStarted": "2023-08-27 16:57:42.033",
+      "dateFinished": "2023-08-27 16:57:42.084",
+      "status": "FINISHED"
     },
     {
       "text": "%pyspark\n# Feature Engineering\ndata \u003d data.withColumn(\"date\", data[\"date_column\"].cast(\"date\"))  # Convert to date type\ndata \u003d data.withColumn(\"lag_nuovi_positivi\", lag(\"nuovi_positivi\", 1).over(Window.orderBy(\"date\")))\n\n# Drop rows with missing values\ndata \u003d data.dropna()\n\n# Assemble features\nfeature_columns \u003d [\"lag_nuovi_positivi\"]  # You can add more features here\nassembler \u003d VectorAssembler(inputCols\u003dfeature_columns, outputCol\u003d\"features\")\ndata \u003d assembler.transform(data)\n\n# Split data into training and testing sets\ntrain_data, test_data \u003d data.randomSplit([0.8, 0.2], seed\u003d123)\n\n# Create a Linear Regression model\nlr \u003d LinearRegression(featuresCol\u003d\"features\", labelCol\u003d\"nuovi_positivi\")\n\n# Train the model\nlr_model \u003d lr.fit(train_data)\n\n# Make predictions on the test data\npredictions \u003d lr_model.transform(test_data)\n\n# Evaluate the model (you can use different metrics)\nfrom pyspark.ml.evaluation import RegressionEvaluator\nevaluator \u003d RegressionEvaluator(labelCol\u003d\"nuovi_positivi\", predictionCol\u003d\"prediction\", metricName\u003d\"rmse\")\nrmse \u003d evaluator.evaluate(predictions)\nprint(\"Root Mean Squared Error (RMSE):\", rmse)\n\n# Create a DataFrame for the next 30 days\nfrom datetime import datetime, timedelta\nlast_date \u003d data.select(\"date\").orderBy(\"date\", ascending\u003dFalse).first()[0]\nnext_30_days \u003d [(last_date + timedelta(days\u003di)) for i in range(1, 31)]\nnext_30_days_df \u003d spark.createDataFrame([(day,) for day in next_30_days], [\"date\"])\n\n# Add lag feature to the next 30 days DataFrame\nnext_30_days_df \u003d next_30_days_df.withColumn(\"lag_nuovi_positivi\", lag(\"nuovi_positivi\", 1).over(Window.orderBy(\"date\")))\n\n# Assemble features for the next 30 days\nnext_30_days_df \u003d assembler.transform(next_30_days_df)\n\n# Make predictions for the next 30 days\npredictions_next_30_days \u003d lr_model.transform(next_30_days_df)\n\n# Show predictions for the next 30 days\npredictions_next_30_days.select(\"date\", \"prediction\").show()\n",
