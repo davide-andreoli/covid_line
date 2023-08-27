@@ -6,6 +6,8 @@ ENV HADOOP_VERSION=3.2
 
 USER root
 
+COPY zeppelin-site.xml /opt/zeppelin/conf/zeppelin-site.xml
+
 RUN wget -nc ${BASE_URL}/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz --progress=bar:force && \
     tar xvf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     rm -r -f /spark && \
